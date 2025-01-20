@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - E-commerce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Custom Styles */
+
+        /* Diferenciación de colores de fondo */
+        .form-section {
+            background-color: #f5f5f5;
+            /* Gris claro */
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        /* Estilo de botones en el header */
+        .header-btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .header-btn:hover {
+            background-color: #0d6efd;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        /* Ajuste de altura del formulario */
+        .checkout-form {
+            max-height: 100%;
+        }
+
+        /* Estilo del resumen de la orden sticky */
+        @media (min-width: 992px) {
+            .order-summary {
+                position: sticky;
+                top: 20px;
+            }
+        }
+
+        /* Mejora de botones */
+        .btn-primary {
+            background-color: #0d6efd;
+            border-color: #0d6efd;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            border-color: #0a58ca;
+        }
+
+        /* Mejora general del formulario */
+        input.form-control,
+        select.form-select {
+            background-color: #fff;
+        }
+
+        /* Estilo para los productos */
+        .product-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .product-details {
+            display: flex;
+            align-items: center;
+        }
+
+
+        /* Estilo del contenedor */
+        .custom-checkbox {
+            display: inline-block;
+            position: relative;
+        }
+
+        /* Ocultar el checkbox nativo */
+        .custom-checkbox input[type="checkbox"] {
+            display: none;
+        }
+
+        /* Estilo del switch */
+        .custom-checkbox .switch {
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            background-color: #ccc;
+            border-radius: 50px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Planeta Tierra como bolita */
+        .custom-checkbox .planet {
+            width: 28px;
+            height: 28px;
+            background: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Ccircle cx="50" cy="50" r="48" fill="%237bc9e7"/%3E%3Cpath d="M40 50c-5-5 5-10-5-15s10-10 5-20 15 5 20 5 10-5 20 0-10 10-5 15 5 10-5 20 5 10-10 15-15-5-20-10z" fill="%2393e6a3"/%3E%3C/svg%3E');
+            background-size: cover;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.5s ease, filter 0.3s ease;
+        }
+
+        /* Cambio de posición del planeta cuando está activado */
+        .custom-checkbox input[type="checkbox"]:checked+.switch .planet {
+            transform: translateX(26px);
+        }
+
+        /* Fondo del interruptor activado */
+        .custom-checkbox input[type="checkbox"]:checked+.switch {
+            background-color: #4caf50;
+        }
+
+        /* Planeta en estado gris cuando está desactivado */
+        .custom-checkbox .planet {
+            filter: grayscale(100%);
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked+.switch .planet {
+            filter: grayscale(0%);
+        }
+
+        /* Animación de chispas (opcional si quieres efectos extras) */
+        .custom-checkbox input[type="checkbox"]:checked+.switch .planet {
+            animation: sparkleEffect 0.6s ease-out;
+        }
+
+        @keyframes sparkleEffect {
+            0% {
+                box-shadow: 0 0 10px #4caf50, 0 0 20px #4caf50;
+            }
+
+            100% {
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const toggleCheckbox = document.getElementById("toggle");
+            const carbonLine = document.getElementById("carbon-footprint-line");
+            const subtotalElement = document.getElementById("subtotal");
+            const shippingElement = document.getElementById("shipping");
+            const totalElement = document.getElementById("total");
+
+            // Convertir los valores a números
+            const subtotal = parseFloat(subtotalElement.textContent.replace('$', ''));
+            const shipping = parseFloat(shippingElement.textContent.replace('$', ''));
+            const carbonFee = 20.00;
+
+            toggleCheckbox.addEventListener("change", (event) => {
+                if (event.target.checked) {
+                    carbonLine.classList.remove("d-none");
+                    const newTotal = subtotal + shipping + carbonFee;
+                    totalElement.textContent = `$${newTotal.toFixed(2)}`;
+                } else {
+                    carbonLine.classList.add("d-none");
+                    const newTotal = subtotal + shipping;
+                    totalElement.textContent = `$${newTotal.toFixed(2)}`;
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <header class="bg-light py-3 shadow-sm">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a href="#" class="navbar-brand">
+                <img src="logoipsum-341.svg" alt="Logo" height="35">
+            </a>
+            <nav>
+                <a href="#" class="text-decoration-none me-2 header-btn">Home</a>
+                <a href="#" class="text-decoration-none header-btn">Help</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <div class="row">
+            <!-- Checkout Form -->
+            <div class="col-lg-8 mb-5">
+                <h2 class="mb-4">Checkout</h2>
+
+                <div class="form-section checkout-form">
+                    <!-- Shipping Address Section -->
+                    <section class="mb-4">
+                        <h4>Shipping Address</h4>
+                        <form>
+                            <!-- Filas combinadas para compactar el formulario -->
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label for="name" class="form-label">Full Name</label>
+                                    <input type="text" id="name" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" id="address" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="row mb-2">
+                                <div class="col-md-6">
+                                    <label for="city" class="form-label">City</label>
+                                    <input type="text" id="city" class="form-control" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="postal-code" class="form-label">Postal Code</label>
+                                    <input type="text" id="postal-code" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-2">
+                                <label for="country" class="form-label">Country</label>
+                                <select id="country" class="form-select" required>
+                                    <option value="">Select a country</option>
+                                    <option value="us">United States</option>
+                                    <option value="es">Spain</option>
+                                    <option value="ar">Argentina</option>
+                                    <option value="mx">Mexico</option>
+                                    <option value="br">Brazil</option>
+                                </select>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Payment Method Section -->
+                    <section class="mb-4">
+                        <h4>Payment Method</h4>
+                        <form>
+                            <div class="form-check mb-3">
+                                <input type="radio" id="credit-card" name="payment-method" class="form-check-input" checked>
+                                <label for="credit-card" class="form-check-label">Credit Card</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="radio" id="paypal" name="payment-method" class="form-check-input">
+                                <label for="paypal" class="form-check-label">PayPal</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input type="radio" id="bank-transfer" name="payment-method" class="form-check-input">
+                                <label for="bank-transfer" class="form-check-label">Bank Transfer</label>
+                            </div>
+                        </form>
+                    </section>
+
+                    <!-- Checkbox con subtítulo -->
+                    <div class="d-flex align-items-start mb-2">
+                        <div class="custom-checkbox me-2">
+                            <input type="checkbox" id="toggle" />
+                            <label for="toggle" class="switch">
+                                <span class="planet"></span>
+                            </label>
+                        </div>
+                        <div>
+                            <div>Eliminar mi huella de carbono</div>
+                            <div class="text-muted" style="font-size: 0.9em;">para un mundo mejor</div>
+                        </div>
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <section>
+                        <div class="form-check">
+                            <input type="checkbox" id="terms" class="form-check-input" required>
+                            <label for="terms" class="form-check-label">I agree to the <a href="#">Terms and
+                                    Conditions</a></label>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4 order-summary">
+                <h4>Order Summary</h4>
+                <div class="border p-3 mb-4">
+                    <!-- Product Item 1 -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 product-item">
+                        <div class="product-details">
+                            <img src="placeholder-product1.jpg" alt="Product 1">
+                            <div>
+                                <h6>Example Product 1</h6>
+                                <p class="text-muted mb-0">Quantity: 2</p>
+                            </div>
+                        </div>
+                        <p class="mb-0">$100.00</p>
+                    </div>
+                    <!-- Product Item 2 -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 product-item">
+                        <div class="product-details">
+                            <img src="placeholder-product2.jpg" alt="Product 2">
+                            <div>
+                                <h6>Example Product 2</h6>
+                                <p class="text-muted mb-0">Quantity: 1</p>
+                            </div>
+                        </div>
+                        <p class="mb-0">$75.00</p>
+                    </div>
+                    <!-- Product Item 3 -->
+                    <div class="d-flex justify-content-between align-items-center mb-3 product-item">
+                        <div class="product-details">
+                            <img src="placeholder-product3.jpg" alt="Product 3">
+                            <div>
+                                <h6>Example Product 3</h6>
+                                <p class="text-muted mb-0">Quantity: 3</p>
+                            </div>
+                        </div>
+                        <p class="mb-0">$45.00</p>
+                    </div>
+                    <!-- Subtotal and Shipping -->
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-0">Subtotal</p>
+                        <p class="mb-0" id="subtotal">$220.00</p>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <p class="mb-0">Shipping</p>
+                        <p class="mb-0" id="shipping">$15.00</p>
+                    </div>
+                    <!-- Línea adicional para la huella de carbono -->
+                    <div class="d-flex justify-content-between d-none" id="carbon-footprint-line">
+                        <p class="mb-0">Eliminar huella de carbono</p>
+                        <p class="mb-0" id="carbon-footprint">$20.00</p>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <h5>Total</h5>
+                        <h5 id="total">$235.00</h5>
+                    </div>
+                </div>
+
+                <!-- Place Order Button -->
+                <button class="btn btn-primary w-100">Place Order</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2025 E-commerce Platform</p>
+            <nav class="d-inline-block">
+                <a href="#" class="text-decoration-none mx-2">Privacy Policy</a>
+                <a href="#" class="text-decoration-none mx-2">Contact</a>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
